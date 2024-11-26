@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Bluesky Emojis",
+  "version": "1.0",
+  "description": "Add Emojis to Bluesky",
+  "permissions": ["scripting"],
+  "host_permissions": ["*://bsky.app/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://bsky.app/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
