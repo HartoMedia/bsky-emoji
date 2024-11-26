@@ -1,11 +1,10 @@
-const PUBLIC_JSON_URL = "https://hartomedia.github.io/bsky-emoji-db/config.json"; // Replace with your JSON URL
+const PUBLIC_JSON_URL = "https://hartomedia.github.io/bsky-emoji-db/config.json";
 
 fetch(PUBLIC_JSON_URL)
   .then((response) => response.json())
   .then((config) => {
     const replacements = config.replacements;
 
-    // Function to replace text in nodes
     function replaceText(node) {
       if (node.nodeType === Node.TEXT_NODE) {
         const parent = node.parentElement;
@@ -15,7 +14,6 @@ fetch(PUBLIC_JSON_URL)
           const regex = new RegExp(replacement.replace, "gi");
 
           if (replacement.with.startsWith("http://") || replacement.with.startsWith("https://")) {
-            // Replace text with an inline image or GIF from a public URL
             if (regex.test(textContent)) {
               const updatedHTML = textContent.replace(regex, () => {
                 return `<img src="${replacement.with}" alt="${replacement.replace}" style="width: 1em; height: 1em;">`;
@@ -26,12 +24,10 @@ fetch(PUBLIC_JSON_URL)
               parent.replaceChild(wrapper, node);
             }
           } else {
-            // Regular text replacement
             textContent = textContent.replace(regex, replacement.with);
           }
         });
 
-        // If only text was replaced, update the text node
         if (textContent !== node.textContent) {
           node.textContent = textContent;
         }
@@ -42,9 +38,7 @@ fetch(PUBLIC_JSON_URL)
       }
     }
 
-    // Function to replace text in <title> and shadow DOMs
     function replaceInSpecialPlaces() {
-      // Replace in <title> for the top navigation bar
       if (document.title) {
         let updatedTitle = document.title;
         replacements.forEach((replacement) => {
@@ -55,15 +49,12 @@ fetch(PUBLIC_JSON_URL)
       }
     }
 
-    // Run the replacement on the entire document body
     if (document.body) {
       replaceText(document.body);
     }
 
-    // Replace in special places like <title>
     replaceInSpecialPlaces();
 
-    // Observe future changes and apply replacements dynamically
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const addedNode of mutation.addedNodes) {
@@ -72,7 +63,6 @@ fetch(PUBLIC_JSON_URL)
           }
         }
       }
-      // Recheck <title> on mutations
       replaceInSpecialPlaces();
     });
 
