@@ -1,4 +1,4 @@
-const PUBLIC_JSON_URL = ""; // Replace with your JSON URL
+const PUBLIC_JSON_URL = "https://hartomedia.github.io/bsky-emoji-db/config.json"; // Replace with your JSON URL
 
 fetch(PUBLIC_JSON_URL)
   .then((response) => response.json())
